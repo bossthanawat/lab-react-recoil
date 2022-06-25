@@ -6,7 +6,8 @@ import {
   OneSuspense,
   MultipleSuspense,
   WithoutSuspense,
-} from "pages/AsynDataQueries/Suspense";
+  QueriesWithParameters
+} from "pages/AsynDataQueries";
 
 function App() {
   return (
@@ -47,6 +48,13 @@ function App() {
             </Typography>
             <Paper sx={{ p: 2 }}>
               <WithoutSuspense />
+            </Paper>
+            {/* Async Queries Without React Suspense */}
+            <Typography variant="h6">
+              Queries with Parameters
+            </Typography>
+            <Paper sx={{ p: 2 }}>
+              <QueriesWithParameters />
             </Paper>
           </Stack>
         </Box>
