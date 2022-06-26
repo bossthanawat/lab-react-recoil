@@ -10,11 +10,13 @@ import {
 } from "recoil";
 import { getUserById } from "_services";
 
-const Loading = ({ children="Loading..." }: { children?: React.ReactNode }) => (
-  <Box sx={{ color: "primary.main" }}>{children}</Box>
-);
+export const Loading = ({
+  children = "Loading...",
+}: {
+  children?: React.ReactNode;
+}) => <Box sx={{ color: "primary.main" }}>{children}</Box>;
 
-const currentUserIDState = atom({
+export const currentUserIDState = atom({
   key: "CurrentUserID",
   default: 1,
 });
@@ -22,7 +24,6 @@ const currentUserIDState = atom({
 const currentUserNameQuery = selector({
   key: "CurrentUserName",
   get: async ({ get }) => {
-    // console.count("Call CurrentUserName");
     const { data } = await getUserById({
       id: get(currentUserIDState),
     });
@@ -40,7 +41,7 @@ export function OneSuspense() {
     <RecoilRoot>
       {/* But what if the request has an error? Recoil selectors can also throw errors which will then be thrown if a component tries to use that value.*/}
       {/* <ErrorBoundary> */}
-      <React.Suspense fallback={<Loading/>}>
+      <React.Suspense fallback={<Loading />}>
         <CurrentUserInfo />
       </React.Suspense>
       {/* </ErrorBoundary> */}
@@ -54,11 +55,7 @@ export function MultipleSuspense() {
       <React.Suspense fallback={<Loading>Loading 1 (Parent)...</Loading>}>
         <Box sx={{ borderStyle: "solid" }}>
           <Typography>Parent</Typography>
-          <React.Suspense
-            fallback={
-              <Loading>Loading (children)...</Loading>
-            }
-          >
+          <React.Suspense fallback={<Loading>Loading (children)...</Loading>}>
             <Box sx={{ borderStyle: "solid", borderColor: "primary.main" }}>
               <Typography>Children</Typography>
               <CurrentUserInfo />
@@ -77,7 +74,7 @@ function CurrentUserInfoLoadable() {
     case "hasValue":
       return <Typography>{loadable.contents}</Typography>;
     case "loading":
-      return <Loading/>;
+      return <Loading />;
     case "hasError":
       throw loadable.contents;
   }
@@ -89,6 +86,7 @@ export function WithoutSuspense() {
     </RecoilRoot>
   );
 }
+
 
 // Queries with Parameters
 
@@ -114,9 +112,7 @@ function UserInfo({ userID = "" }) {
 export function QueriesWithParameters() {
   return (
     <RecoilRoot>
-      <React.Suspense
-        fallback={<Loading/>}
-      >
+      <React.Suspense fallback={<Loading />}>
         <UserInfo userID={"1"} />
         <UserInfo userID={"2"} />
         <UserInfo userID={"3"} />
