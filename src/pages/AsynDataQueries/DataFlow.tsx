@@ -20,6 +20,7 @@ import {
   useSetRecoilState,
   useRecoilRefresher_UNSTABLE,
   waitForAll,
+  useRecoilCallback,
 } from "recoil";
 import { getUserById } from "_services";
 import { Loading } from ".";
@@ -130,6 +131,45 @@ export function DataFlowGraph() {
     <RecoilRoot>
       <React.Suspense fallback={<Loading />}>
         <CurrentUserInfoData />
+      </React.Suspense>
+    </RecoilRoot>
+  );
+}
+
+
+
+
+function CurrentUserInfo() {
+  const currentUser = useRecoilValue(currentUserInfoQuery);
+  const friends = useRecoilValue(friendsInfoQuery);
+
+  const changeUser = useRecoilCallback(({snapshot, set}) => (userID:any) => {
+    snapshot.getLoadable(userInfoQuery(userID)); // pre-fetch user info
+    set(currentUserIDState, userID); // change current user to start new render
+  });
+
+  return (
+    <div>
+      <Typography variant="h6">Current User : {currentUser.name}</Typography>
+      <List>
+        {friends.map((friend) => (
+          <ListItemButton
+            key={friend.id}
+            onClick={() => changeUser(friend.id)}
+          >
+            <ListItemText primary={friend.name} />
+          </ListItemButton>
+        ))}
+      </List>
+    </div>
+  );
+}
+
+export function DataFlowPreFetching() {
+  return (
+    <RecoilRoot>
+      <React.Suspense fallback={<Loading />}>
+        <CurrentUserInfo />
       </React.Suspense>
     </RecoilRoot>
   );

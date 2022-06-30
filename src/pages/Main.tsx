@@ -13,7 +13,7 @@ import {
   MultipleRecoilRootNotSuspense,
 } from "./AsynDataQueries/MultipleRecoilRoot";
 import { Link as RouterLink } from "react-router-dom";
-import { DataFlowGraph } from "./AsynDataQueries/DataFlow";
+import { DataFlowGraph, DataFlowPreFetching } from "./AsynDataQueries/DataFlow";
 
 function Home() {
   return (
@@ -79,6 +79,11 @@ function Home() {
           <Typography variant="h6">Data-Flow Graph</Typography>
           <Paper sx={{ p: 2 }}>
             <DataFlowGraph />
+          </Paper>
+          {/* QData-Flow Graph */}
+          <Typography variant="h6">Pre-Fetching</Typography>
+          <Paper sx={{ p: 2 }}>
+            <DataFlowPreFetching />
           </Paper>
         </Stack>
       </Box>
